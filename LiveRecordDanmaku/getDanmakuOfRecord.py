@@ -1,12 +1,13 @@
 import requests
 import json
 import os
+import time
 
 from requests.api import head
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
 def get_one_piece(rid,index):
-    url = "https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid="+str(rid)+"&icd ndex="+str(index)
+    url = "https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid="+str(rid)+"&index="+str(index)
     res = requests.get(url,headers=headers)
     print("ok")
     danmaku_list=[]
@@ -17,6 +18,11 @@ def get_one_piece(rid,index):
         medal = one_piece_danmaku["medal"] #具体medal里面的内容，前面几个是最重要的，依次是牌子等级，牌子名称，主播名字，主播uid
         new_danmaku = {"text":text,"uid":uid,"medal":medal}
         danmaku_list.append(new_danmaku)
+
+    # with open("test"+str(index)+".json","w",encoding="utf-8") as record_file:
+    #     json_danmaku= json.dumps(danmaku_list,ensure_ascii=False)
+    #     record_file.write(json_danmaku)
+        
     return danmaku_list
     # with open("testagain.json","w",encoding="utf-8") as record_file:
         
@@ -39,9 +45,10 @@ def main(name,rid,title):
         one_piece=get_one_piece(rid,index)
         all_danmaku.extend(one_piece)
         print(str(index)+" ok")
+        # time.sleep(2)
     json_danmaku=json.dumps(all_danmaku,ensure_ascii=False)
     filename = os.path.join(".",name,rid+" && "+title+".json")
-    print(filename)
+    
     try:
         with open(filename,"w",encoding="utf-8") as record_file:
             record_file.write(json_danmaku)
@@ -51,6 +58,7 @@ def main(name,rid,title):
 
 
 if __name__ == "__main__":
-    
     rid = input("请输入回放id\n")
-    main(rid)
+    name="test"
+    title="海边"
+    main(name,rid,title)

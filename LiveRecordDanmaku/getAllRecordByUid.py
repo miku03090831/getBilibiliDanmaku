@@ -41,10 +41,10 @@ def get_records_by_roomid(name,roomid):
             title = record_list[index]["title"]
             try:
                 getDanmakuOfRecord.main(name,rid,title)
-                print(str(rid)+"爬取完毕,休息5秒")
-                time.sleep(5)
+                print(str(rid)+"爬取完毕,休息2秒")
+                time.sleep(2)
             except:
-                logging.error("page "+str(pagenum)+" video "+str(index+1)+" error,perhaps no danmaku")
+                logging.error("page "+str(pagenum)+" video "+str(index+1)+" error,perhaps no danmaku. rid:"+str(rid))
                 
 
 def main():
@@ -54,6 +54,7 @@ def main():
     isExist = os.path.exists(path)
     if not isExist:
         os.makedirs(path)
+    print("alive")
     get_records_by_roomid(name,roomid)
     # print(name)
     # print(roomid)
