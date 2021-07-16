@@ -1,8 +1,11 @@
+from typing import Pattern
 import requests
 import json
 from bs4 import BeautifulSoup
 import decrypt
 import os
+import logging
+import re
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
@@ -38,13 +41,17 @@ def get_danmaku(bv,name):
     
     # with open("danmaku_xml.xml","w",encoding='utf-8') as xml_file:
     #     xml_file.write(xml_text)
-    filename = os.path.join(".","视频 "+name,bv+" && "+title+".json")
+    next_name = bv+" && "+title
+    next_name = re.sub(r'[\\|/\*\?\.\:\>\<]',"&&",next_name)
+    filename = os.path.join(".","视频 "+name,next_name+".json")
     try:
         with open(filename,"w",encoding='utf-8') as json_file:
             json_danmaku = json.dumps(danmaku_list,ensure_ascii=False)
             json_file.write(json_danmaku)
-    except:
-        pass
+    except Exception as e:
+        logging.error("bv "+"name ")
+        logging.error(e)
+        
             
 def get_title(bv):
     url = "http://api.bilibili.com/x/web-interface/view?bvid="+str(bv)
@@ -63,6 +70,11 @@ def get_cid(bv):
     return cid
 
 def main(bv,name):
+    logging.basicConfig(level=logging.ERROR,  
+                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',  
+                    datefmt='%a, %d %b %Y %H:%M:%S',  
+                    filename='./error_log.txt',  
+                    filemode='a+')  
     get_danmaku(bv,name)
 
 if __name__ == "__main__":
