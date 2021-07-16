@@ -7,6 +7,15 @@ import os
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
 def get_danmaku(bv,name):
+    url = "http://api.bilibili.com/x/web-interface/view?bvid="+str(bv)
+    res = requests.get(url, headers=headers)
+    res.encoding='utf-8'
+    try:
+        staff = json.loads(res.text)["data"]["staff"]
+        return 
+    except:
+        pass
+
     title = get_title(bv)
     cid  = get_cid(bv)
     url = "https://api.bilibili.com/x/v1/dm/list.so?oid="+str(cid)
@@ -30,9 +39,12 @@ def get_danmaku(bv,name):
     # with open("danmaku_xml.xml","w",encoding='utf-8') as xml_file:
     #     xml_file.write(xml_text)
     filename = os.path.join(".","视频 "+name,bv+" && "+title+".json")
-    with open(filename,"w",encoding='utf-8') as json_file:
-        json_danmaku = json.dumps(danmaku_list,ensure_ascii=False)
-        json_file.write(json_danmaku)
+    try:
+        with open(filename,"w",encoding='utf-8') as json_file:
+            json_danmaku = json.dumps(danmaku_list,ensure_ascii=False)
+            json_file.write(json_danmaku)
+    except:
+        pass
             
 def get_title(bv):
     url = "http://api.bilibili.com/x/web-interface/view?bvid="+str(bv)
@@ -55,4 +67,5 @@ def main(bv,name):
 
 if __name__ == "__main__":
     bv=input()
-    main(bv)
+    name = "七海Nana7mi"
+    main(bv,name)

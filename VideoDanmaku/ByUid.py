@@ -34,9 +34,9 @@ def main(uid):
     info = json.loads(res.text)["data"]
     total_nums = info["page"]["count"]
     page_nums = total_nums//30+1
-    # page_limit = 5 if page_nums > 5 else page_nums # 最多爬取5页的视频（150个）
-    page_limit = 1 if page_nums > 1 else page_nums # 先爬取一页试试
-    for page in range(1,page_limit+1):
+    page_limit = 5 if page_nums > 5 else page_nums # 最多爬取5页的视频（150个）
+    # page_limit = 1 if page_nums > 1 else page_nums # 先爬取一页试试
+    for page in range(3,page_limit+1):
         get_page_video(uid,page,name)  # 逐页爬取
 
 if __name__ == "__main__":
