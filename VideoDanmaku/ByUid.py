@@ -34,14 +34,13 @@ def main(uid):
     info = json.loads(res.text)["data"]
     total_nums = info["page"]["count"]
     page_nums = total_nums//30+1
-    page_limit = 3 if page_nums > 3 else page_nums # 最多爬取3页的视频（90个）
-    # page_limit = 2 if page_nums > 2 else page_nums # 先爬取一页试试
+    page_limit = 3 if page_nums > 3 else page_nums # 最多爬取前三页
     for page in range(1,page_limit+1):
         get_page_video(uid,page,name)  # 逐页爬取
 
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 if __name__ == "__main__":
     uid = input()
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
     main(uid)
 
     

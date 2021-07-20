@@ -16,8 +16,10 @@ https://github.com/Aruelius/crc32-crack
 
 安装好所有的依赖库，最笨的方法就是告诉你缺啥你就pip install啥
 
-`python getDanmakuByBvid.py` 使用时请确保python和py文件的路径正确
+在文件夹目录下输入命令
 
-程序会记录下每一条弹幕的发送者uid和内容
+`python getFromList.py`（或者利用集成开发环境运行getFromList.py文件）
 
-最终爬取到的结果会存到同目录下，与视频同名的json文件当中
+然后按照提示输入起始和终结的序号
+
+即可

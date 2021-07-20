@@ -36,7 +36,7 @@ def get_danmaku(bv,name):
         decrypted_uid = decrypt.main(encrypted_uid)
         d_obj = {'uid':decrypted_uid,'content':content}
         danmaku_list.append(d_obj)
-        print("爬取"+str(len(danmaku_list))+"条")
+        print(str(len(danmaku_list))+"条")
         
     
     # with open("danmaku_xml.xml","w",encoding='utf-8') as xml_file:
@@ -49,7 +49,7 @@ def get_danmaku(bv,name):
             json_danmaku = json.dumps(danmaku_list,ensure_ascii=False)
             json_file.write(json_danmaku)
     except Exception as e:
-        logging.error("bv "+"name ")
+        logging.error(bv)
         logging.error(e)
         
             
