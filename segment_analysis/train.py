@@ -5,24 +5,24 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import cross_val_score
-
+import pickle
 
 def main():
     df = pd.read_csv('data.csv', encoding='gb18030')
-    df2 = pd.read_csv('test.csv', encoding='gb18030')
+    #df2 = pd.read_csv('test.csv', encoding='gb18030')
 
     def make_label(df):
         df["sentiment"] = df["star"].apply(lambda x: 1 if x>3 else 0)
     make_label(df)
     X = df[['comment']]
-    test = df2[['comment']]
+    #test = data[['content']]
     y = df.sentiment
 
     def chinese_word_cut(mytext):
         return " ".join(jieba.cut(mytext))
 
     X['cutted_comment'] = X.comment.apply(chinese_word_cut)
-    test['cutted_comment'] = test.comment.apply(chinese_word_cut)
+    #test['cutted_comment'] = test.content.apply(chinese_word_cut)
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
 
@@ -54,5 +54,9 @@ def main():
     #cross_val_score(pipe, X_train.cutted_comment, y_train, cv=5, scoring='accuracy').mean()
 
     pipe.fit(X_train.cutted_comment, y_train)
-    print(pipe.predict(test.cutted_comment))
+    with open('./SAmodel.pkl', 'wb') as f:
+        pickle.dump(pipe, f)
+        print("保存模型成功！")
+
+    #print(pipe.predict(test.cutted_comment))
 main()
