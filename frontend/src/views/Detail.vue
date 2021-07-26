@@ -1,10 +1,13 @@
 <template>
   <div class="detail">
     <el-container>
-      <el-header class="title">名字</el-header>
+      <el-header class="title">{{this.name}}</el-header>
       <el-container class="bottom">
-        <el-aside class="number">Aside</el-aside>
-        <el-main class="hot-word" id="hot-word">Main</el-main>
+        <el-aside class="number">
+          the number of this vtuber's hardcore fans is {{this.fans_num}},
+          and{{this.single_rate}}% of them are single-minded
+        </el-aside>
+        <el-main class="hot-word" id="hot-word"></el-main>
       </el-container>
     </el-container>
   </div>
@@ -15,41 +18,35 @@ import * as echarts from "echarts";
 import "echarts-wordcloud/dist/echarts-wordcloud";
 import "echarts-wordcloud/dist/echarts-wordcloud.min";
 export default {
+  data(){
+    return{
+      name:"",
+      fans_num:0,
+      rate:0,
+      uid: this.$route.query.uid,
+      keywords:[
+      ]
+    }
+  },
+  computed:{
+    single_rate(){
+      return Math.ceil(10000*this.rate)/100;
+    }
+  },
   methods: {
     wordGraphInit() {
       let hotword = echarts.init(document.getElementById("hot-word"));
       hotword.clear();
 
-      var keywords = [
-        { name: "男神", value: 2.64 },
-        { name: "好身材", value: 4.03 },
-        { name: "校草", value: 24.95 },
-        { name: "酷", value: 4.04 },
-        { name: "时尚", value: 5.27 },
-        { name: "阳光活力", value: 5.8 },
-        { name: "初恋", value: 3.09 },
-        { name: "英俊潇洒", value: 24.71 },
-        { name: "霸气", value: 6.33 },
-        { name: "腼腆", value: 2.55 },
-        { name: "蠢萌", value: 3.88 },
-        { name: "青春", value: 8.04 },
-        { name: "网红", value: 5.87 },
-        { name: "萌", value: 6.97 },
-        { name: "认真", value: 2.53 },
-        { name: "古典", value: 2.49 },
-        { name: "温柔", value: 3.91 },
-        { name: "有个性", value: 3.25 },
-        { name: "可爱", value: 9.93 },
-        { name: "幽默诙谐", value: 3.65 },
-      ];
+      
       var option = {
         series: [
           {
             type: "wordCloud",
-            sizeRange: [15, 80],
+            sizeRange: [15, 100],
             rotationRange: [0, 0],
             rotationStep: 45,
-            gridSize: 8,
+            gridSize: 20,
             shape: "pentagon",
             width: "100%",
             height: "100%",
@@ -68,16 +65,36 @@ export default {
                 },
               },
             },
-            data: keywords,
+            data: this.keywords,
           },
         ],
       };
-
       hotword.setOption(option);
     },
+    getHotWord(){
+      this.$axios.post("api/hotword",{
+          'uid': this.uid
+        }).then(res=>{
+          for(let key in res.data){
+            this.keywords.push({"name":key,"value":res.data[key]})
+          }
+          this.wordGraphInit(); 
+        })
+    },
+    getInfo(){
+      this.$axios.post("api/getinfo",{
+          'uid': this.uid
+        }).then(res=>{
+          console.log(res.data)
+          this.fans_num = res.data["fans_num"]
+          this.rate = res.data["rate"]
+          this.name = res.data["name"]
+        })
+    }
   },
   mounted() {
-    this.wordGraphInit();
+    this.getHotWord();//跟挂载到dom有关，需要在mount之后
+    this.getInfo()
   },
 };
 </script>

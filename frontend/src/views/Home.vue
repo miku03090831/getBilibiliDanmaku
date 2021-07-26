@@ -9,6 +9,12 @@ import * as echarts from "echarts";
 export default {
   name: "Home",
   components: {},
+  data(){
+    return{
+      nodeData:[],
+      edgeData:[]
+    }
+  },
   methods: {
     graphInit() {
       let myChart = echarts.init(document.getElementById("vtuber-graph"));
@@ -24,11 +30,14 @@ export default {
             type: "graph",
             layout: "force",
             roam: true,
-            edgeSymbol: ["circle", "arrow"],
+            zoom:1,
+            focusNodeAdjacency: true,
+            edgeSymbol: ["none", "none"],
             edgeSymbolSize: [4, 10],
             force: {
-              repulsion: 2500,
-              edgeLength: [80, 1000],
+              repulsion: 3000,
+              edgeLength: [500, 2000],
+              gravity:0.05
             },
             draggable: true,
             itemStyle: {
@@ -36,15 +45,15 @@ export default {
                 color: "#4b565b",
               },
             },
-            lineStyle: {
-              normal: {
-                width: 2,
-                color: "#4b565b",
-              },
-            },
+            // lineStyle: {
+            //   normal: {
+            //     width: 0.5,
+            //     color: "#000000",
+            //   },
+            // },
             edgeLabel: {
               normal: {
-                show: true,
+                show: false,
                 formatter: function (x) {
                   return x.data.name;
                 },
@@ -56,38 +65,36 @@ export default {
                 textStyle: {},
               },
             },
-            data: [{
-              name:"阿梓",
-              uid:1234,
-              symbolSize:Math.ceil(Math.log(12345))*10,
-              des:"number of fan-club members: 1234"
-            },{
-              name:"七海",
-              uid:12345,
-              symbolSize:Math.ceil(Math.log(123456))*10,
-              des:"number of fan-club members: 12345"
-            },],
-            links:[{
-              source:"阿梓",
-              target:"七海",
-              des:"70%"
-            }]
+            data: this.nodeData,
+            links:this.edgeData
           },
         ],
       };
       myChart.setOption(option);
       myChart.on('click',(params)=>{
         if(params.dataType==='node'){
-          let detailRoute = this.$router.resolve({path: "/detail",query:{name: params.data.name}})
+          let detailRoute = this.$router.resolve({path: "/detail",query:{uid: params.data.uid}})
           window.open(detailRoute.href)
           console.log(params)
         }
       })
     },
+    getNodes(){
+      this.$axios.post("api/getNodes",{}).then(res=>{
+          this.nodeData = res.data
+          this.getEdges()
+        })
+    },
+    getEdges(){
+      this.$axios.post("api/getEdges",{}).then(res=>{
+          this.edgeData = res.data
+          console.log(this.edgeData)
+          this.graphInit()
+        })
+    }
   },
   mounted() {
-    
-    this.graphInit();
+    this.getNodes(); //链式调用。。。确保异步拉取数据也能顺序执行
   },
 };
 </script>
