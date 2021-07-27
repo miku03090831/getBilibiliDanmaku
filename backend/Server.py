@@ -9,7 +9,7 @@ app=Flask(__name__)
 
 
 @app.route("/api/hotword",methods=['POST'])
-def hot_word(): #获取词云图
+def hot_word():
     # print(request.body)
     uid = request.json["uid"]
     # print(uid)
@@ -39,7 +39,7 @@ def hot_word(): #获取词云图
 
 
 @app.route("/api/getinfo",methods=['POST'])
-def get_info():  #获取uid，粉丝数，单推人比例，等等信息（详见fansInfo.json)
+def get_info():
     uid = request.json["uid"]
     with open("fansInfo.json","r",encoding="utf-8") as fans:
         info = json.load(fans)
@@ -47,7 +47,7 @@ def get_info():  #获取uid，粉丝数，单推人比例，等等信息（详�
     return jsonify(info[uid])
 
 @app.route("/api/getNodes",methods=["POST"])
-def getNodes():  # 获取力引导图的节点
+def getNodes():
     nodes = []
     with open("fansInfo.json","r",encoding="utf-8") as fans:
         info = json.load(fans)
@@ -70,7 +70,7 @@ def getNodes():  # 获取力引导图的节点
     return jsonify(nodes)
 
 @app.route("/api/getEdges",methods=["POST"])
-def getEdge(): # 获取力引导图的边
+def getEdges():
     edges = []
     uid_list=[]
     with open("relevance.json","r") as rele_file:
@@ -88,23 +88,40 @@ def getEdge(): # 获取力引导图的边
                 continue
             if item == uid: #自己到自己的边不画
                 continue
-            if item < uid: # 两个点只能画出来一条边，不知道为啥。画两遍也是一条边，干脆只画一条边
+            if item < uid:
                 continue
-            if target[item] >= 0.15: 
+            v = target[item] if target[item] > rele[item][uid] else rele[item][uid]
+            limit = 0.15
+            if v >= limit:    
                 e = {
                     "source":info[uid]["name"],
                     "target":info[item]["name"],
                     "curveness":0.9,
                     "name":math.ceil(target[item]*100)/100,
-                    "value":target[item],
+                    "value":v,
                     "lineStyle":{
                         "color":random.choice(["#993366","#336699","#FF6600","#663300","#6699FF"]),
-                        "width":1.5
+                        "width": (v-limit)*100
                     }
                 }
                 edges.append(e)
 
     return jsonify(edges)
+
+@app.route("/api/getSentiment",methods=["POST"])
+def getSentiment():
+    uid = request.json["uid"]
+    result = 0
+    with open("positiveRate.txt","r",encoding="utf-8") as p_rate:
+        rates = p_rate.readlines()
+        for r in rates:
+            r = r.strip().split(",")
+            if uid==r[0]:
+                result = r[1]
+                break
+
+    return jsonify(result)
+
 
 
 

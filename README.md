@@ -26,6 +26,38 @@ backend里面是后端，采用flask搭建
 
 然后`npm run serve`运行，成功后在浏览器地址栏输入`localhost:8080`即可访问前端界面（需要先把后端运行起来）
 
+# 关于如何修改星系图相关：
+
+## 边相关
+
+1. 边太多了（太少了） 
+
+   修改后端Server.py中getEdges()函数中limit变量的值，是相关度的下限（取值在0.15往上有点少，在0.1往下有点多）
+
+2. 边的粗细
+
+   后端Server.py中搜索`lineStyle`,里面的width。目前设置的粗细是100倍的（相关度-相关度下限）
+
+3. 边的颜色
+
+   同2，修改color
+
+4. 边的长短
+
+   在前端中src/views/Home.vue中修改graphInit()函数中的option变量，下面的force属性中的edgeLength属性（边长的上下限，具体长度和相关度有关，越相关越短），也与force中的repulsion（斥力）和gravity（向中心的引力）有关，比较玄学
+
+   
+
+## 点相关
+
+1. 点的大小
+
+   后端Server.py中getNodes()的symbolSize
+
+2. 点的颜色
+
+   同上，在itemStyle中设置color
+
 
 
 
