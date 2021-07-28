@@ -1,0 +1,56 @@
+name: datapy3
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - defaults
+dependencies:
+  - ca-certificates=2017.08.26=ha1e5d58_0
+  - certifi=2018.1.18=py36_0
+  - libcxx=4.0.1=h579ed51_0
+  - libcxxabi=4.0.1=hebd6815_0
+  - libedit=3.1=hb4e282d_0
+  - libffi=3.2.1=h475c297_4
+  - ncurses=6.0=hd04f020_2
+  - openssl=1.0.2n=hdbc3d79_0
+  - pip=9.0.1=py36_5
+  - python=3.6.4=hc167b69_1
+  - readline=7.0=hc1231fa_4
+  - setuptools=38.5.1=py36_0
+  - sqlite=3.22.0=h3efe00b_0
+  - tk=8.6.7=h35a86e2_3
+  - wheel=0.30.0=py36h5eb2c71_1
+  - xz=5.2.3=h0278029_2
+  - zlib=1.2.11=hf3cbc9b_2
+  - pip:
+    - appnope==0.1.0
+    - decorator==4.2.1
+    - ipykernel==4.8.2
+    - ipython==6.2.1
+    - ipython-genutils==0.2.0
+    - jedi==0.11.1
+    - jieba==0.39
+    - jupyter-client==5.2.2
+    - jupyter-core==4.4.0
+    - numpy==1.14.1
+    - pandas==0.22.0
+    - parso==0.1.1
+    - pexpect==4.4.0
+    - pickleshare==0.7.4
+    - prompt-toolkit==1.0.15
+    - ptyprocess==0.5.2
+    - pygments==2.2.0
+    - python-dateutil==2.6.1
+    - pytz==2018.3
+    - pyzmq==17.0.0
+    - scikit-learn==0.19.1
+    - scipy==1.0.0
+    - simplegeneric==0.8.1
+    - six==1.11.0
+    - snownlp==0.12.3
+    - tornado==5.0
+    - traitlets==4.3.2
+    - wcwidth==0.1.7
+    - xlrd==1.1.0
+prefix: /anaconda2/envs/datapy3
+
